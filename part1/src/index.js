@@ -1,39 +1,83 @@
-import ReactDOM from 'react-dom';
-import {useState} from 'react'
+import React, { useState } from 'react'
+import ReactDOM from 'react-dom'
+/*
+const Display = ({ counter }) => <div>{counter}</div>
 
-const Hello = ({ age, name }) => {
+const Button = ({ onClick, text }) => (
+  <button onClick={onClick}>
+    {text}
+  </button>
+)
 
-    const bornYear = () => (new Date().getFullYear() - age)
 
+const History = (props) => {
+  debugger
+  if (props.allClicks.length === 0) {
     return (
-        <div>
-            <p>
-                Hello {name}, you are {age} years old
-            </p>
-            <p>So you were probably born in {bornYear()}</p>
-        </div>
+      <div>
+        the app is used by pressing the buttons
+      </div>
     )
+  }
+
+  return (
+    <div>
+      button press history: {props.allClicks.join(' ')}
+    </div>
+  )
 }
 
-// const App = () => {
-//     const name = 'Peter'
-//     const age = 10
+const App = () => {
+  const [clicks, setClicks] = useState({
+    left: 0, right: 0
+  })
 
-//     return (
-//     <div>
-//         <h1>Grettings</h1>
-//         <Hello name="Maya" age={26 + 10} />
-//         <Hello name={name} age={age} />
-//     </div>
-//     )
-// }
+  const [allClicks, setAll] = useState([])
 
-const App = (props) => {
-    const [counter, setCounter ] = useState(0)
 
-    return (
-        <div onSelect = {() => console.profileEnd('click')}>{counter}</div>
-    )
+
+  const handleLeftClick = () => {
+    setClicks({ ...clicks, left: clicks.left + 1 })
+    setAll(allClicks.concat('L'))
+  }
+
+
+
+  const handleRightClick = () => {
+    setAll(allClicks.concat('R'))
+    setClicks({ ...clicks, right: clicks.right + 1 })
+  }
+
+  return (
+    <div>
+      {clicks.left}
+      <Button onClick={handleLeftClick} text='left' />
+      <Button onClick={handleRightClick} text='right' />
+      {clicks.right}
+      <History allClicks={allClicks} />
+    </div>
+  )
 }
+*/
 
-ReactDOM.render(<App />, document.getElementById('root'))
+const App = () => {
+
+
+  
+  const
+   [value, setValue] = useState(10)
+  
+    return (
+      <div>
+        {value}
+        <button onClick={() => setValue(0)}>reset to zero</button>
+      </div>
+    )
+  }
+  
+  ReactDOM.render(
+    <App />, 
+    document.getElementById('root')
+  )
+
+ReactDOM.render(<App valor={5} />, document.getElementById('root'))
