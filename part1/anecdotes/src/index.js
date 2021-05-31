@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const Button = ({ handleClick, text }) => <button onClick={handleClick}>{text}</button>
+
 const App = (props) => {
   const [selected, setSelected] = useState(0)
   const totalAnecdotes = props.anecdotes.length
@@ -8,7 +10,7 @@ const App = (props) => {
 
   const [votes, setVotes] = useState(initialVotes)
 
-  const getRandomNumber = (max) => Math.floor(Math.random() * max) 
+  const getRandomNumber = (max) => Math.floor(Math.random() * max)
   const handleClickNext = () => setSelected(getRandomNumber(totalAnecdotes))
   const handleClickVote = () => {
     const newVotes = [...votes]
@@ -20,9 +22,9 @@ const App = (props) => {
   return (
     <div>
       {props.anecdotes[selected]}
-      <div>      
-        <button onClick = {handleClickNext}>next anecdote</button>
-        <button onClick = {handleClickVote}>vote</button>
+      <div>
+        <Button handleClick={handleClickNext} text="Next" />
+        <Button handleClick={handleClickVote} text="Vote" />
       </div>
     </div>
   )
