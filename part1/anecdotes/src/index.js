@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom'
 
 const Button = ({ handleClick, text }) => <button onClick={handleClick}>{text}</button>
 
-const App = (props) => {
+const App = ({anecdotes}) => {
   const [selected, setSelected] = useState(0)
-  const totalAnecdotes = props.anecdotes.length
+  const totalAnecdotes = anecdotes.length
   const initialVotes = Array(totalAnecdotes).fill(0)
 
   const [votes, setVotes] = useState(initialVotes)
@@ -19,12 +19,22 @@ const App = (props) => {
     setVotes(newVotes)
   }
 
+  let maxVotes = Math.max(...votes)
+  let indexMostVoted = votes.indexOf(maxVotes)
+  
   return (
     <div>
-      {props.anecdotes[selected]}
+      <h2>Anecdote of the day</h2>
+      <div>{anecdotes[selected]}</div>
+      <div>has {votes[selected]} votes</div>
       <div>
         <Button handleClick={handleClickNext} text="Next" />
         <Button handleClick={handleClickVote} text="Vote" />
+      </div>
+      <div>
+        <h2>Anecdote with most votes</h2>
+        <div>{anecdotes[indexMostVoted]}</div>
+        <div>has {maxVotes} votes</div>
       </div>
     </div>
   )
