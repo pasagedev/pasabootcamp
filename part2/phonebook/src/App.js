@@ -10,9 +10,18 @@ const App = () => {
     setNewName(event.target.value)
   }
 
+  const isPersonOnBook = (name) => {
+    return persons.find((person) => person.name === name) 
+    ?true
+    :false
+    
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
-    setPersons(persons.concat({ name: newName }))
+    !isPersonOnBook(newName)
+    ?setPersons(persons.concat({ name: newName }))
+    :alert(`${newName} is already added to phonebook`)
     setNewName('')
   }
 
@@ -31,7 +40,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <div>{persons.map((person) => (
-        <div>{person.name}</div>
+        <div key={person.name}>{person.name}</div>
       )
       )}
       </div>
