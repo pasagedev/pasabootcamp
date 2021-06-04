@@ -36,14 +36,19 @@ const CountryInformation = ({ country }) => (
   </div>
 )
 
-const Countries = ({ countries }) => {
+const Countries = ({ countries, handleShowButton, countrySelected }) => {
+  if (countrySelected !=='')
+    return <CountryInformation country={countrySelected[0]} />
   if (countries.length > 10)
     return <div>To many matches, specify another filter</div>
   else if (countries.length === 1)
     return <CountryInformation country={countries[0]} />
   else
     return countries.map((country) => (
-      <div key={country.numericCode}>{country.name}</div>
+      <div key={country.numericCode}>
+        {country.name}
+        <button id={country.numericCode} onClick={handleShowButton}> show </button>
+      </div>
     ))
 }
 
@@ -51,14 +56,20 @@ const App = () => {
 
   const [countryFilter, setCountryFilter] = useState('')
   const [countries, setCountries] = useState([])
+  const [countrySelected, setCountrySelected] = useState('')
 
   useEffect(() => {
     axios.get('https://restcountries.eu/rest/v2/all')
       .then(response => setCountries(response.data))
   }, [])
 
-  const handleInputCountry = event => setCountryFilter(event.target.value)
+  const handleInputCountry = event => {
+    setCountryFilter(event.target.value)
+    setCountrySelected('')
+  }
 
+  const showCountry = (event) => setCountrySelected(
+    countries.filter(country => country.numericCode === event.target.id))
 
   const filterCountries = countries.filter(({ name }) => (
     name.toLowerCase().includes(countryFilter.toLowerCase())
@@ -67,7 +78,7 @@ const App = () => {
   return (
     <div>
       <CountrySearch inputValue={countryFilter} handleInput={handleInputCountry} />
-      <Countries countries={filterCountries} />
+      <Countries countries={filterCountries} handleShowButton={showCountry} countrySelected={countrySelected} />
     </div>
   )
 }
