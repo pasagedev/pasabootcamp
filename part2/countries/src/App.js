@@ -1,85 +1,8 @@
 import axios from 'axios'
 import react, { useEffect } from 'react'
 import { useState } from 'react'
-
-const CountrySearch = ({ inputValue, handleInput }) => (
-  <div>
-    find countries: <input onChange={handleInput} value={inputValue} />
-  </div>
-)
-
-const Flag = ({ country }) => (
-  <img
-    src={country.flag}
-    alt={`flag of ${country.name}`}
-    width={150} height={100}
-  />
-)
-
-const Languages = ({ languages }) => (
-  <ul>
-    {languages.map(language =>
-      <li key={language.name}>
-        {language.name}
-      </li>)
-    }
-  </ul>
-)
-
-const WeatherDetail = ({current}) => (
-  <div>
-    <div><strong>temperature </strong>{current.temperature} º Celcius</div>
-    <img 
-    src={current.weather_icons[0]}
-    alt={`flag of ${current.name}`}
-    width={50} height={50}
-    />
-    <div><strong>wind </strong>{current.wind_speed} km/h with direction {current.wind_dir}</div>
-  </div>
-)
-
-const CityWeather = ({ cityWeather }) => {
-  console.log(cityWeather)
-  if (cityWeather === '')
-    return <div>Not information to show</div>
-  else {
-    const { current } = cityWeather
-    return <WeatherDetail current={current} />
-  }
-}
-
-const CountryDetail = ({ country, cityWeather }) => (
-  <div>
-    <h2>{country.name}</h2>
-    <div>capital {country.capital}</div>
-    <div>population {country.population}</div>
-    <h3>languages</h3>
-    <Languages languages={country.languages} />
-    <Flag country={country} />
-    <h3>wheather in {country.capital}</h3>
-    <CityWeather cityWeather={cityWeather} />
-  </div>
-)
-
-const CountriesList = ({ countries, handleShowButton }) => (
-  countries.map((country) => (
-    <div key={country.numericCode}>
-      {country.name}
-      <button id={country.numericCode} onClick={handleShowButton}> show </button>
-    </div>
-  ))
-)
-
-const CountryInformation = ({ countries, handleShowButton, countrySelected, cityWeather }) => {
-  if (countries.length > 10)
-    return <div>To many matches, specify another filter</div>
-  else if (countrySelected !== '')
-    return <CountryDetail country={countrySelected} cityWeather={cityWeather} />
-  else
-    return <CountriesList countries={countries} handleShowButton={handleShowButton} />
-}
-
-
+import {CountryInformation} from './components/countryInfo.js'
+import {CountrySearch} from './components/countrySearch.js'
 const App = () => {
 
   const [countryFilter, setCountryFilter] = useState('')
