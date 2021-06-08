@@ -26,11 +26,27 @@ const Languages = ({ languages }) => (
   </ul>
 )
 
-const CityWeather = ({ cityWeather }) => (
-  (cityWeather !== '' )
-  ? <div>{cityWeather.error.info}</div>
-  : <div>Not information to show</div>
+const WeatherDetail = ({current}) => (
+  <div>
+    <div><strong>temperature </strong>{current.temperature} º Celcius</div>
+    <img 
+    src={current.weather_icons[0]}
+    alt={`flag of ${current.name}`}
+    width={50} height={50}
+    />
+    <div><strong>wind </strong>{current.wind_speed} km/h with direction {current.wind_dir}</div>
+  </div>
 )
+
+const CityWeather = ({ cityWeather }) => {
+  console.log(cityWeather)
+  if (cityWeather === '')
+    return <div>Not information to show</div>
+  else {
+    const { current } = cityWeather
+    return <WeatherDetail current={current} />
+  }
+}
 
 const CountryDetail = ({ country, cityWeather }) => (
   <div>
@@ -93,6 +109,7 @@ const App = () => {
   const handleInputCountry = event => {
     setCountryFilter(event.target.value)
     setCountrySelected('')
+    setCityWeather('')
   }
 
   const handleShowButton = (event) => setCountrySelected(
@@ -102,7 +119,7 @@ const App = () => {
     setCountrySelected(countriesFiltered[0])
 
   if (countrySelected !== '' && cityWeather === '')
-    requestWeather(countrySelected.city)
+    requestWeather(countrySelected.capital)
 
   return (
     <div>
