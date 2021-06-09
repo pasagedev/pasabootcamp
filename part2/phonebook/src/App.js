@@ -29,11 +29,21 @@ const App = () => {
     if (newName === '')
       return alert('You must to enter a name')
     const newPerson = { name: newName, number: newPhone }
-    !isPersonOnBook(newName)
-      ? personsService.addPerson(newPerson).then(addedPerson => setPersons(persons.concat(addedPerson)))
-      : alert(`${newName} is already added to phonebook`)
-    setNewName('')
-    setNewPhone('')
+    if (isPersonOnBook(newName)) {
+      const result = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one ?`)
+      if (result) {
+        const oldPerson = persons.find(person => person.name === newPerson.name)
+        personsService.updatePerson(oldPerson.id, newPerson)
+        .then(updatedPerson =>
+          setPersons(persons.map(person => person.id !== oldPerson.id ? person : updatedPerson)))
+      }
+    }
+    else {
+      personsService.addPerson(newPerson).then(addedPerson => setPersons(persons.concat(addedPerson)))
+      setNewName('')
+      setNewPhone('')
+    }
+
   }
 
   const handleDeletePerson = (name, id) => {
@@ -41,6 +51,7 @@ const App = () => {
       personsService.deletePerson(id)
         .then(setPersons(persons.filter(person => person.id !== id)))
   }
+
   const numbersToShow = persons.filter((person) => person.name.toLowerCase().indexOf(newNameFilter.toLowerCase()) !== -1)
 
   return (
