@@ -43,7 +43,7 @@ const CountriesList = ({ countries, handleShowButton }) => (
 
 export const CountryInformation = ({ countries, handleShowButton, countrySelected, cityWeather }) => {
     if (countries.length > 10)
-        return <div>To many matches, specify another filter</div>
+        return <div>Too many matches, specify another filter</div>
     else if (countrySelected !== '')
         return <CountryDetail country={countrySelected} cityWeather={cityWeather} />
     else
