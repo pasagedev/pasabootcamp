@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Persons, Filter, PersonForm } from './components/phonebook'
-import axios from 'axios'
 import personsService from './services/persons'
 
 const App = () => {
@@ -9,9 +8,10 @@ const App = () => {
   const [newPhone, setNewPhone] = useState('')
   const [newNameFilter, setNewFilter] = useState('')
 
-  useEffect(() => {personsService
-    .getAllPersons()
-    .then(persons => setPersons(persons))
+  useEffect(() => {
+    personsService
+      .getAllPersons()
+      .then(persons => setPersons(persons))
   }, [])
 
   const handleNameInput = (event) => setNewName(event.target.value)
@@ -36,6 +36,11 @@ const App = () => {
     setNewPhone('')
   }
 
+  const handleDeletePerson = (name, id) => {
+    if (window.confirm(`Delete ${name} ?`))
+      personsService.deletePerson(id)
+        .then(setPersons(persons.filter(person => person.id !== id)))
+  }
   const numbersToShow = persons.filter((person) => person.name.toLowerCase().indexOf(newNameFilter.toLowerCase()) !== -1)
 
   return (
@@ -49,7 +54,7 @@ const App = () => {
         nameInputValue={newName}
         numberInputValue={newPhone} />
       <h3>Numbers</h3>
-      <Persons numbersToShow={numbersToShow} />
+      <Persons numbersToShow={numbersToShow} handleDeletePerson={handleDeletePerson} />
     </div>
   )
 }

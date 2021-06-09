@@ -12,7 +12,13 @@ const addPerson = personToAdd =>
         .post(baseUrl, personToAdd)
         .then(response => response.data)
 
+const deletePerson = personTodelete =>
+    axios
+    .delete(`${baseUrl}/${personTodelete}`)
+    .then(deletedPerson => deletePerson)
+
 export default {
     getAllPersons,
-    addPerson
+    addPerson,
+    deletePerson
 }

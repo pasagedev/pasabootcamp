@@ -26,13 +26,13 @@ export const PersonForm = ({ handleSubmit, handleNameInput, nameInputValue, hand
     </form>
 )
 
-const Person = ({ name, number }) => <div>{name} {number}</div>
+const Person = ({ name, number, handleDeletePerson }) => (
+    <div>{name} {number} <button onClick={handleDeletePerson}>delete</button></div>
+)
 
-export const Persons = ({ numbersToShow }) => {
+export const Persons = ({ numbersToShow, handleDeletePerson }) => {
     return (
-        <div> {numbersToShow.map(({ name, number }) => (
-            <Person key={name}
-                name={name}
-                number={number} />))}
+        <div> {numbersToShow.map(({ name, number, id }) => (
+            <Person key={id} name={name} number={number} handleDeletePerson={() => handleDeletePerson(name, id)} />))}
         </div>)
 }
