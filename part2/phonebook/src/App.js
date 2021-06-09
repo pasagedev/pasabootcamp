@@ -27,13 +27,14 @@ const App = () => {
     event.preventDefault()
     if (newName === '')
       return alert('You must to enter a name')
-    event.preventDefault()
+    const newPerson = { name: newName, number: newPhone }
+    const postRequest = () => axios
+      .post('http://localhost:3001/persons', newPerson)
     !isPersonOnBook(newName)
-      ? setPersons(persons.concat({ name: newName, number: newPhone }))
+      ? postRequest().then(() => setPersons(persons.concat(newPerson)))
       : alert(`${newName} is already added to phonebook`)
     setNewName('')
     setNewPhone('')
-    console.log({ newPhone })
   }
 
   const numbersToShow = persons.filter((person) => person.name.toLowerCase().indexOf(newNameFilter.toLowerCase()) !== -1)
