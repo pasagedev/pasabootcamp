@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Persons, Filter, PersonForm } from './components/phonebook'
 import axios from 'axios'
+import personsService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -8,9 +9,9 @@ const App = () => {
   const [newPhone, setNewPhone] = useState('')
   const [newNameFilter, setNewFilter] = useState('')
 
-  useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-    .then(response => setPersons(response.data))
+  useEffect(() => {personsService
+    .getAllPersons()
+    .then(persons => setPersons(persons))
   }, [])
 
   const handleNameInput = (event) => setNewName(event.target.value)
@@ -28,10 +29,8 @@ const App = () => {
     if (newName === '')
       return alert('You must to enter a name')
     const newPerson = { name: newName, number: newPhone }
-    const postRequest = () => axios
-      .post('http://localhost:3001/persons', newPerson)
     !isPersonOnBook(newName)
-      ? postRequest().then(() => setPersons(persons.concat(newPerson)))
+      ? personsService.addPerson(newPerson).then(addedPerson => setPersons(persons.concat(addedPerson)))
       : alert(`${newName} is already added to phonebook`)
     setNewName('')
     setNewPhone('')
