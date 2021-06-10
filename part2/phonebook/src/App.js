@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Persons, Filter, PersonForm, SuccessfullyAlert } from './components/phonebook'
+import { Persons, Filter, PersonForm, MessageAlert } from './components/phonebook'
 import personsService from './services/persons'
 
 const App = () => {
@@ -7,7 +7,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [newNameFilter, setNewFilter] = useState('')
-  const [successMessage, setSuccessMessage] = useState(null)
+  const defaultMessage = {message: null, type: ''}
+  const [messageAlert, setMessageAlert] = useState(defaultMessage)
 
   useEffect(() => {
     personsService
@@ -44,12 +45,14 @@ const App = () => {
       personsService.addPerson(newPerson)
         .then(addedPerson => {
           setPersons(persons.concat(addedPerson))
-          console.log('ok')
-          setSuccessMessage(`Added ${addedPerson.name}`)
-          setTimeout(() => setSuccessMessage(null), 2000)
+          setMessageAlert(
+            {
+              message: `Added ${addedPerson.name}`,
+              type: 'success'
+            })
+          setTimeout(() => setMessageAlert(defaultMessage), 2000)
           setNewName('')
           setNewPhone('')
-
         }
         )
     }
@@ -59,6 +62,14 @@ const App = () => {
     if (window.confirm(`Delete ${name} ?`))
       personsService.deletePerson(id)
         .then(setPersons(persons.filter(person => person.id !== id)))
+        .catch(() => {
+          setMessageAlert(
+            {
+              message: `Information of ${name} has already removed from server`,
+              type: 'error'
+            })
+          setTimeout(() => setMessageAlert(defaultMessage), 2500)
+        })
   }
 
   const numbersToShow = persons.filter((person) => person.name.toLowerCase().indexOf(newNameFilter.toLowerCase()) !== -1)
@@ -67,7 +78,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Filter handleFilterChange={handleFilterChange} value={newNameFilter} />
-      <SuccessfullyAlert message={successMessage} />
+      <MessageAlert message={messageAlert.message} type={messageAlert.type} />
       <PersonForm
         handleSubmit={handleSubmitPersonForm}
         handleNameInput={handleNameInput}

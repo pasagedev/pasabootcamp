@@ -25,10 +25,10 @@ export const PersonForm = ({ handleSubmit, handleNameInput, nameInputValue, hand
         </div>
     </form>
 )
-export const SuccessfullyAlert = ({ message }) => (
+export const MessageAlert = ({ message, type }) => (
     message === null ? <div>mensage: {message}</div>
         :
-        <div className='successfully'>
+        <div className={type}>
             {message}
         </div>
 )
