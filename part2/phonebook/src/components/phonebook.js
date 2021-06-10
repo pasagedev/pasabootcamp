@@ -25,6 +25,13 @@ export const PersonForm = ({ handleSubmit, handleNameInput, nameInputValue, hand
         </div>
     </form>
 )
+export const SuccessfullyAlert = ({ message }) => (
+    message === null ? <div>mensage: {message}</div>
+        :
+        <div className='successfully'>
+            {message}
+        </div>
+)
 
 const Person = ({ name, number, handleDeletePerson }) => (
     <div>{name} {number} <button onClick={handleDeletePerson}>delete</button></div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Persons, Filter, PersonForm } from './components/phonebook'
+import { Persons, Filter, PersonForm, SuccessfullyAlert } from './components/phonebook'
 import personsService from './services/persons'
 
 const App = () => {
@@ -7,6 +7,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [newNameFilter, setNewFilter] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     personsService
@@ -34,16 +35,24 @@ const App = () => {
       if (result) {
         const oldPerson = persons.find(person => person.name === newPerson.name)
         personsService.updatePerson(oldPerson.id, newPerson)
-        .then(updatedPerson =>
-          setPersons(persons.map(person => person.id !== oldPerson.id ? person : updatedPerson)))
+          .then(updatedPerson =>
+            setPersons(persons.map(person => person.id !== oldPerson.id ? person : updatedPerson))
+          )
       }
     }
     else {
-      personsService.addPerson(newPerson).then(addedPerson => setPersons(persons.concat(addedPerson)))
-      setNewName('')
-      setNewPhone('')
-    }
+      personsService.addPerson(newPerson)
+        .then(addedPerson => {
+          setPersons(persons.concat(addedPerson))
+          console.log('ok')
+          setSuccessMessage(`Added ${addedPerson.name}`)
+          setTimeout(() => setSuccessMessage(null), 2000)
+          setNewName('')
+          setNewPhone('')
 
+        }
+        )
+    }
   }
 
   const handleDeletePerson = (name, id) => {
@@ -58,6 +67,7 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
       <Filter handleFilterChange={handleFilterChange} value={newNameFilter} />
+      <SuccessfullyAlert message={successMessage} />
       <PersonForm
         handleSubmit={handleSubmitPersonForm}
         handleNameInput={handleNameInput}
