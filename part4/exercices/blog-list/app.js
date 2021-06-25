@@ -12,13 +12,13 @@ const mongoose = require('mongoose')
 logger.info('connecting to', config.MONGODB_URI)
 
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
-    .then(() => logger.info('MongoDB connected'))
-    .catch(error => logger.error('error connecting to MongoDB', error.message))
+  .then(() => logger.info('MongoDB connected'))
+  .catch(error => logger.error('error connecting to MongoDB', error.message))
 
 app.use(cors())
 app.use(express.json())
 app.use(middleware.requestLogger)
-// app.use(morgan('dev'))
+app.use(morgan('dev'))
 
 app.use('/api/blogs', blogsRouter)
 
