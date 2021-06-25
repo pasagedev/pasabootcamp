@@ -1,26 +1,25 @@
 const logger = require('./logger')
 
 const requestLogger = (request, response, next) => {
-    logger.info('Method:', request.method)
-    logger.info('Path: ', request.path)
-    logger.info('Body: ', request.body)
-    logger.info('---')
-    next()
+  logger.info('Method:', request.method)
+  logger.info('Path: ', request.path)
+  logger.info('Body: ', request.body)
+  logger.info('---')
+  next()
 }
 
 const unknownEndpoint = (request, response, next) => {
-    response.status(404).send({error: 'unknow endpoint'})
+  response.status(404).send({ error: 'unknow endpoint' })
 }
 
 const errorHandler = (error, request, response, next) => {
-    logger.error(error)
+  logger.error(error)
 
-    if (error.name === 'ValidationError')
-        return response.status(400).json({error: error.message})
-    next(error)
+  if (error.name === 'ValidationError') { return response.status(400).json({ error: error.message }) }
+  next(error)
 }
 module.exports = {
-    requestLogger,
-    unknownEndpoint,
-    errorHandler
+  requestLogger,
+  unknownEndpoint,
+  errorHandler
 }
