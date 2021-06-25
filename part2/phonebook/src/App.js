@@ -7,7 +7,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [newNameFilter, setNewFilter] = useState('')
-  const defaultMessage = {message: null, type: ''}
+  const defaultMessage = { message: null, type: '' }
   const [messageAlert, setMessageAlert] = useState(defaultMessage)
 
   useEffect(() => {
@@ -39,6 +39,14 @@ const App = () => {
           .then(updatedPerson =>
             setPersons(persons.map(person => person.id !== oldPerson.id ? person : updatedPerson))
           )
+          .catch(error => {
+            setMessageAlert(
+              {
+                message: error.response.data.error,
+                type: 'error'
+              })
+            setTimeout(() => setMessageAlert(defaultMessage), 4000)
+          })
       }
     }
     else {
@@ -55,6 +63,14 @@ const App = () => {
           setNewPhone('')
         }
         )
+        .catch(error => {
+          setMessageAlert(
+            {
+              message: error.response.data.error,
+              type: 'error'
+            })
+          setTimeout(() => setMessageAlert(defaultMessage), 4000)
+        })
     }
   }
 
