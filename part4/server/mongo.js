@@ -14,7 +14,7 @@ mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFind
 const noteSchema = new mongoose.Schema({
   content: String,
   date: Date,
-  important: Boolean,
+  important: Boolean
 })
 
 const Note = mongoose.model('Note', noteSchema)
@@ -22,9 +22,8 @@ const Note = mongoose.model('Note', noteSchema)
 const note = new Note({
   content: 'Nueva nota',
   date: new Date(),
-  important: true,
+  important: true
 })
-
 
 // note.save().then(result => {
 //     console.log('not saved!')
