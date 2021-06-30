@@ -43,6 +43,23 @@ test('"id" propety is the name of unic identificator', async () => {
   const result = await api.get('/api/blogs')
   expect(result.body[0].id).toBeDefined()
 })
+test('a new blog entry is added correctly', async () => {
+  const newBlog = {
+    title: 'Test Blog',
+    author: 'Pablo',
+    url: 'https://test-blog.com/'
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+
+  const blogs = await Blog.find({})
+  const titlesBlogsInDb = blogs.map(b => b.title)
+
+  expect(blogs).toHaveLength(initialBlogs.length + 1)
+  expect(titlesBlogsInDb).toContain(newBlog.title)
+})
 
 afterAll(() => {
   mongoose.connection.close()
