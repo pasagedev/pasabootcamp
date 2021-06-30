@@ -8,7 +8,8 @@ const initialBlogs = [
   {
     title: 'React patterns',
     author: 'Michael Chan',
-    url: 'https://reactpatterns.com/'
+    url: 'https://reactpatterns.com/',
+    likes: 10
   },
   {
     title: 'Go To Statement Considered Harmful',
@@ -39,15 +40,16 @@ test('all blogs are returned', async () => {
 
   expect(result.body).toHaveLength(initialBlogs.length)
 })
-test('"id" propety is the name of unic identificator', async () => {
+test('"id" property is the name of unic identificator', async () => {
   const result = await api.get('/api/blogs')
   expect(result.body[0].id).toBeDefined()
 })
 test('a new blog entry is added correctly', async () => {
   const newBlog = {
-    title: 'Test Blog',
+    title: 'POST a new Test Blog',
     author: 'Pablo',
-    url: 'https://test-blog.com/'
+    url: 'https://test-blog.com/',
+    likes: 5
   }
   await api
     .post('/api/blogs')
@@ -59,6 +61,22 @@ test('a new blog entry is added correctly', async () => {
 
   expect(blogs).toHaveLength(initialBlogs.length + 1)
   expect(titlesBlogsInDb).toContain(newBlog.title)
+})
+test('blog with missing "like" property is added with 0 by default', async () => {
+  const newBlog = {
+    title: 'Test Blog without likes property',
+    author: 'Pablo',
+    url: 'https://test-blog.com/'
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+
+  const blogs = await Blog.find({})
+  const newBlogAdded = blogs.find(b => b.title === 'Test Blog without likes property')
+
+  expect(newBlogAdded.likes).toBe(0)
 })
 
 afterAll(() => {
