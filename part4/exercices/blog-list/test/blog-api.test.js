@@ -78,7 +78,8 @@ test('blog with missing "like" property is added with 0 by default', async () =>
 
   expect(newBlogAdded.likes).toBe(0)
 })
-test.only('blog with missing "title" or "url" property is not added', async () => {
+test('blog with missing "title" or "url" property is not added', async () => {
+  const blogsAtStart = await Blog.find({})
   const newBlogWithoutTitle = {
     title: '',
     author: 'Pablo',
@@ -99,8 +100,35 @@ test.only('blog with missing "title" or "url" property is not added', async () =
     .send(newBlogWithoutUrl)
     .expect(400)
 
+  const blogsAtEnd = await Blog.find({})
+  expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
+})
+test('deletion of a blog work correctly', async () => {
+  const blogsAtStart = await Blog.find({})
+
   const blogs = await Blog.find({})
-  expect(blogs).toHaveLength(initialBlogs.length)
+  await api
+    .delete(`/api/blogs/${blogs[0].id}`)
+    .expect(204)
+
+  const blogsAtEnd = await Blog.find({})
+  expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
+})
+test('update a blog work correctly', async () => {
+  const blogs = await Blog.find({})
+  const blogToUpdate = blogs[0]
+  const newContentBlog = {
+    title: 'This is a test to update a blog',
+    author: blogToUpdate.author,
+    url: blogToUpdate.url
+  }
+  await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(newContentBlog)
+    .expect(200)
+
+  const updatedBlog = await Blog.findById(blogToUpdate.id)
+  expect(updatedBlog.title).toContain(newContentBlog.title)
 })
 
 afterAll(() => {
