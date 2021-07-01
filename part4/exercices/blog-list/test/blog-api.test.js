@@ -78,6 +78,30 @@ test('blog with missing "like" property is added with 0 by default', async () =>
 
   expect(newBlogAdded.likes).toBe(0)
 })
+test.only('blog with missing "title" or "url" property is not added', async () => {
+  const newBlogWithoutTitle = {
+    title: '',
+    author: 'Pablo',
+    url: 'https://test-blog-without-title-property.com/'
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlogWithoutTitle)
+    .expect(400)
+
+  const newBlogWithoutUrl = {
+    title: 'Test Blog without "url" property',
+    author: 'Pablo'
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlogWithoutUrl)
+    .expect(400)
+
+  const blogs = await Blog.find({})
+  expect(blogs).toHaveLength(initialBlogs.length)
+})
 
 afterAll(() => {
   mongoose.connection.close()
