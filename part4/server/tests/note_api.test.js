@@ -71,7 +71,6 @@ test('note without content is not added', async () => {
     .expect(400)
 
   const notesAtEnd = await helper.notesInDb()
-
   expect(notesAtEnd).toHaveLength(helper.initialNotes.length)
 })
 test('a specific note can be viewed', async () => {
@@ -82,7 +81,6 @@ test('a specific note can be viewed', async () => {
     .get(`/api/notes/${noteToView.id}`)
     .expect(200)
     .expect('Content-Type', /application\/json/)
-  // console.log(typeof (noteToView.date))
   const processedNoteToView = JSON.parse(JSON.stringify(noteToView))
   console.log(typeof (resultNote.body.date))
   expect(resultNote.body).toEqual(processedNoteToView)
