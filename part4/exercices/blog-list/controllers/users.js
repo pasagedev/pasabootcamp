@@ -7,7 +7,6 @@ usersRouter.post('/', async (request, response) => {
 
   const saltRounds = 10
   const minLengthPass = 3
-  console.log('before')
 
   if (body.password.length < minLengthPass) {
     return response
@@ -15,7 +14,6 @@ usersRouter.post('/', async (request, response) => {
       .json({ error: `password is shorter than the minimum allowed length (${minLengthPass}). ` })
   }
 
-  console.log('after')
   const passwordHash = await bcrypt.hash(body.password, saltRounds)
 
   const user = new User(
@@ -32,7 +30,12 @@ usersRouter.post('/', async (request, response) => {
 
 usersRouter.get('/', async (request, response) => {
   const users = await User.find({})
-  console.log(users)
+    .populate('blogs', {
+      url: 1,
+      title: 1,
+      author: 1,
+      id: 1
+    })
   response.json(users)
 })
 

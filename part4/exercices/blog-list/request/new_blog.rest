@@ -1,0 +1,11 @@
+POST http://localhost:3003/api/blogs
+Content-type: application/json 
+
+{
+    "title": "Anoter blog with user",
+    "author": "Pablo",
+    "url": "pasage.dev",
+    "userId": "60e3416013f74d55a8ba3cda",
+    "likes": 2
+
+}
