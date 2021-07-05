@@ -3,14 +3,20 @@ const mongoose = require('mongoose')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  await User.deleteMany({})
 
   const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
-  const promiseArray = blogObjects.map(blog => blog.save())
-  await Promise.all(promiseArray)
+  const promiseBlogsArray = blogObjects.map(blog => blog.save())
+  await Promise.all(promiseBlogsArray)
+
+  const userObjects = helper.initialUsers.map(user => new User(user))
+  const promiseUsersArray = userObjects.map(user => user.save())
+  await Promise.all(promiseUsersArray)
 })
 describe('When there is initially some blogs saved', () => {
   test('blogs returned as json', async () => {
@@ -123,6 +129,47 @@ describe('Update of a blog', () => {
 
     const updatedBlog = await Blog.findById(blogToUpdate.id)
     expect(updatedBlog.title).toContain(newContentBlog.title)
+  })
+})
+describe('Add a new user', () => {
+  test('fails with status 400 if username is already on database', async () => {
+    const userAtStart = await helper.usersInDb()
+    const userToAdd = {
+      username: userAtStart[0].username,
+      name: 'same username',
+      password: 'sameUser1234'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(userToAdd)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('`username` to be unique')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(userAtStart.length)
+  })
+
+  test('fails with status 400 if username or password do not have the minimum length', async () => {
+    const userAtStart = await helper.usersInDb()
+    const userToAdd = {
+      username: 'pab',
+      name: 'short username and password',
+      password: 'sa'
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(userToAdd)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('is shorter than the minimum')
+
+    const usersAtEnd = await helper.usersInDb()
+    expect(usersAtEnd).toHaveLength(userAtStart.length)
   })
 })
 

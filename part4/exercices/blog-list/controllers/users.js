@@ -6,6 +6,16 @@ usersRouter.post('/', async (request, response) => {
   const body = request.body
 
   const saltRounds = 10
+  const minLengthPass = 3
+  console.log('before')
+
+  if (body.password.length < minLengthPass) {
+    return response
+      .status(400)
+      .json({ error: `password is shorter than the minimum allowed length (${minLengthPass}). ` })
+  }
+
+  console.log('after')
   const passwordHash = await bcrypt.hash(body.password, saltRounds)
 
   const user = new User(
