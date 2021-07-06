@@ -6,6 +6,6 @@ Content-type: application/json
     "author": "Pablo",
     "url": "pasage.dev",
     "userId": "60e3416013f74d55a8ba3cda",
-    "likes": 2
+    "likes": 3
 
 }
