@@ -10,13 +10,14 @@ beforeEach(async () => {
   await Blog.deleteMany({})
   await User.deleteMany({})
 
-  const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
-  const promiseBlogsArray = blogObjects.map(blog => blog.save())
-  await Promise.all(promiseBlogsArray)
-
   const userObjects = helper.initialUsers.map(user => new User(user))
   const promiseUsersArray = userObjects.map(user => user.save())
   await Promise.all(promiseUsersArray)
+
+  const [userObject] = await User.find({})
+  const blogObjects = helper.initialBlogs.map(blog => new Blog({ ...blog, user: userObject }))
+  const promiseBlogsArray = blogObjects.map(blog => blog.save())
+  await Promise.all(promiseBlogsArray)
 })
 describe('When there is initially some blogs saved', () => {
   test('blogs returned as json', async () => {
@@ -40,6 +41,7 @@ describe('When there is initially some blogs saved', () => {
 
 describe('Addition of a new blog', () => {
   test('succeeds with valid data', async () => {
+    const token = await helper.getValidToken()
     const newBlog = {
       title: 'POST a new Test Blog',
       author: 'Pablo',
@@ -48,6 +50,7 @@ describe('Addition of a new blog', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
 
@@ -59,6 +62,7 @@ describe('Addition of a new blog', () => {
   })
 
   test('has 0 likes by default if "like" property missing', async () => {
+    const token = await helper.getValidToken()
     const newBlog = {
       title: 'Test Blog without likes property',
       author: 'Pablo',
@@ -66,6 +70,7 @@ describe('Addition of a new blog', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlog)
       .expect(201)
 
@@ -76,6 +81,7 @@ describe('Addition of a new blog', () => {
   })
 
   test('fails when "title" or "url" missing', async () => {
+    const token = await helper.getValidToken()
     const newBlogWithoutTitle = {
       title: '',
       author: 'Pablo',
@@ -84,6 +90,7 @@ describe('Addition of a new blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlogWithoutTitle)
       .expect(400)
 
@@ -93,8 +100,25 @@ describe('Addition of a new blog', () => {
     }
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlogWithoutUrl)
       .expect(400)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
+  test('fails with 401 status code when token is missing', async () => {
+    const newBlog = {
+      title: 'POST a new Test Blog',
+      author: 'Pablo',
+      url: 'https://test-blog.com/',
+      likes: 5
+    }
+    await api
+      .post('/api/blogs')
+      .set('Authorization', ' ')
+      .send(newBlog)
+      .expect(401)
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
@@ -103,9 +127,11 @@ describe('Addition of a new blog', () => {
 
 describe('Deletion of a blog', () => {
   test('succeeds with status code 204 if id is valid', async () => {
+    const token = await helper.getValidToken()
     const blogsAtStart = await helper.blogsInDb()
     await api
       .delete(`/api/blogs/${blogsAtStart[0].id}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
