@@ -1,9 +1,0 @@
-POST http://localhost:3001/api/notes
-Content-type: application/json 
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InBhc2FnZWRldiIsImlkIjoiNjBlMDIyOWU3NzlkOTAyZDhjNGM5ODJjIiwiaWF0IjoxNjI1MzM1NDE1fQ.bjq5k5bN1fDDM-LPzI8BBo8QF84IEA0Gs7pil91s9hE
-
-{
-    "content": "Nota con token",
-    "userId": "60e0229e779d902d8c4c982c",
-    "important": true
-}
