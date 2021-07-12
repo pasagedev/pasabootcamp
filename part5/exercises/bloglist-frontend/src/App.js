@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import {BlogForm} from './components/BlogForm'
 import {Notification} from './components/notification'
 import { LoginForm } from './components/LoginForm'
+import { Togglable } from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -114,25 +115,27 @@ const App = () => {
       <Notification message={message.content} className={message.type}/>
       {user === null
         ? <LoginForm
+            handleSubmit={handleLogin}          
             username={username}
             password={password}
             handleUsernameChange={({target}) => setUsername(target.value)}
             handlePasswordChange= {({target}) => setPassword(target.value)}
-            handleSubmit={handleLogin}          
           />
         : <div>
             <p>{user.name} logged in
               <button onClick = {handleLogout} >logout</button> 
             </p>      
-            <BlogForm 
-              handleSubmit = {handleNewBlog} 
-              title={title} 
-              author={author}
-              url={url}
-              handleTitleChange={({target}) => setTitle(target.value)} 
-              handleAuthorChange={({target}) => setAuthor(target.value)} 
-              handleUrlChange={({target}) => setUrl(target.value)}
-            /> 
+            <Togglable showButtonLabel='create new blog' hideButtonLabel='cancel'>
+              <BlogForm 
+                handleSubmit = {handleNewBlog} 
+                title={title} 
+                author={author}
+                url={url}
+                handleTitleChange={({target}) => setTitle(target.value)} 
+                handleAuthorChange={({target}) => setAuthor(target.value)} 
+                handleUrlChange={({target}) => setUrl(target.value)}
+              /> 
+            </Togglable>
             {renderBlogs()}
           </div>
       }
