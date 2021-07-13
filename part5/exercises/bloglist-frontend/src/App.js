@@ -106,12 +106,14 @@ const App = () => {
     } catch (exception){
       console.log(exception)
     }
-}
-  const renderBlogs = () => (
-      blogs.map(blog =>
+  }
+  const renderBlogs = () => {
+    const sortedBlogs = blogs.sort((first, second) => second.likes - first.likes)
+    return(
+      sortedBlogs.map(blog =>
         <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog)}/>
       )
-  )
+  )}
   return (
     <div>
       <h2>blogs</h2>
