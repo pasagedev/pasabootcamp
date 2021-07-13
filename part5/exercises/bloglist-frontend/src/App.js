@@ -91,9 +91,25 @@ const App = () => {
     }
   }
 
+  const handleLike = async ({id: blogId, user, likes, author, title, url}) => {
+    const blogWithNewLike = {
+      user: user.id,
+      likes: likes+1,
+      author,
+      title,
+      url
+    }
+    try {
+      await blogService.update(blogId, blogWithNewLike)
+      const blogsUpdated= await blogService.getAll()
+      setBlogs(blogsUpdated)
+    } catch (exception){
+      console.log(exception)
+    }
+}
   const renderBlogs = () => (
       blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog)}/>
       )
   )
   return (
