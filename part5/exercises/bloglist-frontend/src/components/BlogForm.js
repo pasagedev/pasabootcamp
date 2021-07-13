@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-export const BlogForm = ({newBlog}) => {
+export const BlogForm = ({ newBlog }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -8,9 +8,9 @@ export const BlogForm = ({newBlog}) => {
   const handleSubmit = event => {
     event.preventDefault()
     newBlog({
-        title,
-        author,
-        url
+      title,
+      author,
+      url
     })
     setTitle('')
     setAuthor('')
@@ -20,28 +20,28 @@ export const BlogForm = ({newBlog}) => {
     <div>
       <h2>create new</h2>
       <form onSubmit={handleSubmit}>
-        <div> title:   
-          <input 
+        <div> title:
+          <input
             type='text'
             value={title}
             name='title'
-            onChange={({target}) => setTitle(target.value)}
+            onChange={({ target }) => setTitle(target.value)}
           />
         </div>
-        <div> author:   
-          <input 
+        <div> author:
+          <input
             type='author'
             value={author}
             name='author'
-            onChange={({target}) => setAuthor(target.value)}
+            onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
-        <div> url:   
-          <input 
+        <div> url:
+          <input
             type='text'
             value={url}
             name='url'
-            onChange={({target}) => setUrl(target.value)}
+            onChange={({ target }) => setUrl(target.value)}
           />
         </div>
         <button type="submit">create</button>

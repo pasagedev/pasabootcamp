@@ -3,7 +3,7 @@ import { Note } from './components/note'
 import noteService from './services/notes'
 import { Notification } from './components/notification'
 import { LoginForm } from './components/LoginForm'
-import {NoteForm} from './components/NoteForm'
+import { NoteForm } from './components/NoteForm'
 import { Togglable } from './components/Togglable'
 import loginService from './services/login'
 import login from './services/login'
@@ -74,8 +74,8 @@ const App = () => {
         <em>Note app, Department of Computer Science, University of Helsinki 2020</em>
       </div>)
   }
-  
-  const login = async ({username, password}) => {    
+
+  const login = async ({ username, password }) => {
     try{
       const user = await loginService.login({
         username, password
@@ -92,23 +92,23 @@ const App = () => {
       }, 5000)
     }
   }
-  
+
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
       {user === null
         ? <Togglable buttonLabel='show login'>
-            <LoginForm 
-              login={login}
-            />
-          </Togglable>
+          <LoginForm
+            login={login}
+          />
+        </Togglable>
         : <div>
-            <p>{user.name} logged-in</p>
-            <Togglable buttonLabel='new note' ref={noteFormRef}>
-              <NoteForm createNote={addNote}/>
-            </Togglable>
-          </div>
+          <p>{user.name} logged-in</p>
+          <Togglable buttonLabel='new note' ref={noteFormRef}>
+            <NoteForm createNote={addNote}/>
+          </Togglable>
+        </div>
       }
 
       <div>
@@ -123,7 +123,7 @@ const App = () => {
             toggleImportance={toggleImportanceOf} />
         )}
       </ul>
-      
+
       <Footer />
     </div>
   )
