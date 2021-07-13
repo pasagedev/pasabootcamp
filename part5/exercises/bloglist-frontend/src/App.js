@@ -9,9 +9,6 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -24,16 +21,16 @@ const App = () => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
-  }, [])
 
-  useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-    }  
-  }, [])
+      blogService.setToken(user.token)
 
+    }  
+
+  }, [])
 
   const handleLogin = async event => {
     event.preventDefault()
@@ -76,18 +73,9 @@ const App = () => {
     setUser(null)
   }
 
-  const handleNewBlog = async event => {
-    event.preventDefault()
-    const blogObject = {
-      title,
-      author,
-      url
-    }
+  const newBlog = async (newBlogObject) => {
     try {
-      const newBlogAdded = await blogService.create(blogObject)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
+      const newBlogAdded = await blogService.create(newBlogObject)
       setBlogs(blogs.concat(newBlogAdded))
       setMessage(
         {
@@ -101,7 +89,6 @@ const App = () => {
     }catch (exception) {
       console.log(exception)
     }
-
   }
 
   const renderBlogs = () => (
@@ -126,15 +113,7 @@ const App = () => {
               <button onClick = {handleLogout} >logout</button> 
             </p>      
             <Togglable showButtonLabel='create new blog' hideButtonLabel='cancel'>
-              <BlogForm 
-                handleSubmit = {handleNewBlog} 
-                title={title} 
-                author={author}
-                url={url}
-                handleTitleChange={({target}) => setTitle(target.value)} 
-                handleAuthorChange={({target}) => setAuthor(target.value)} 
-                handleUrlChange={({target}) => setUrl(target.value)}
-              /> 
+              <BlogForm newBlog={newBlog}/> 
             </Togglable>
             {renderBlogs()}
           </div>
