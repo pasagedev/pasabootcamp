@@ -76,7 +76,8 @@ const App = () => {
   const newBlog = async (newBlogObject) => {
     try {
       const newBlogAdded = await blogService.create(newBlogObject)
-      setBlogs(blogs.concat(newBlogAdded))
+      const blogsUpdated= await blogService.getAll()
+      setBlogs(blogsUpdated)
       setMessage(
         {
           content: `a new blog ${newBlogAdded.title} added`,
@@ -107,11 +108,33 @@ const App = () => {
       console.log(exception)
     }
   }
+
+  const handleDelete = async blog => {
+    const confirm = window.confirm(`Remove blog ${blog.title}`)
+    
+    if (!confirm) return
+
+    try {
+      await blogService.remove(blog.id)
+      const blogsUpdated= await blogService.getAll()
+      setBlogs(blogsUpdated)
+    }catch (exception) {
+      console.log(exception)
+    }
+
+  }
+
   const renderBlogs = () => {
     const sortedBlogs = blogs.sort((first, second) => second.likes - first.likes)
     return(
       sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog)}/>
+        <Blog 
+        key={blog.id} 
+        blog={blog} 
+        handleLike={() => handleLike(blog)}
+        handleDelete={() =>handleDelete(blog)}
+        deleteButton ={blog.user.username === user.username ? true: false}
+        />
       )
   )}
   return (
