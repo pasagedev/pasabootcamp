@@ -8,6 +8,7 @@ import { exportAllDeclaration } from '@babel/types'
 describe('<Blog />', () => {
   let component
   let blog
+  const mockHandleLike = jest.fn()
 
   beforeEach(() => {
     blog = {
@@ -22,7 +23,7 @@ describe('<Blog />', () => {
     }
 
     component = render(
-      <Blog blog={blog}/>
+      <Blog blog={blog} handleLike={mockHandleLike}/>
     )
 
   })
@@ -41,14 +42,26 @@ describe('<Blog />', () => {
     expect(likes.parentNode).toHaveStyle('display: none')
   })
 
-  test('render blog\'s url and number of likes after click in show button', () => {
+  test('renders blog\'s url and number of likes after click in show button', () => {
     const url = component.getByText(blog.url)
     const likes = component.getByText(`likes ${blog.likes}`)
     const button = component.getByText('show')
 
     fireEvent.click(button)
+
     expect(url.parentNode).not.toHaveStyle('display: none')
     expect(likes.parentNode).not.toHaveStyle('display: none')
+  })
+
+  test('calls the correct number of times to handler like button', () => {
+    const button = component.getByText('like')
+    const clicks = 2
+    for(let i=0; i<clicks; i++){
+      fireEvent.click(button)
+
+    }
+    expect(mockHandleLike.mock.calls).toHaveLength(clicks)
+
   })
 
 })
