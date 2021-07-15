@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Note } from './components/note'
+import { Note } from './components/Note'
 import noteService from './services/notes'
 import { Notification } from './components/notification'
 import { LoginForm } from './components/LoginForm'
