@@ -30,7 +30,7 @@ export const BlogForm = ({ newBlog }) => {
         </div>
         <div> author:
           <input
-            type='author'
+            type='text'
             value={author}
             name='author'
             onChange={({ target }) => setAuthor(target.value)}
