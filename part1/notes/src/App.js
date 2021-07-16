@@ -6,8 +6,6 @@ import { LoginForm } from './components/LoginForm'
 import { NoteForm } from './components/NoteForm'
 import { Togglable } from './components/Togglable'
 import loginService from './services/login'
-import login from './services/login'
-import { newExpression } from '@babel/types'
 
 const App = () => {
 
@@ -46,7 +44,7 @@ const App = () => {
       .then(returnedNote => {
         setNotes(notes.map(note => note.id !== id ? note : returnedNote))
       })
-      .catch(error => {
+      .catch(() => {
         setErrorMessage(`Note '${note.content}' was already removed from server`)
         setTimeout(() => { setErrorMessage(null) }, 5000)
         setNotes(notes.filter(n => n.id !== id))
