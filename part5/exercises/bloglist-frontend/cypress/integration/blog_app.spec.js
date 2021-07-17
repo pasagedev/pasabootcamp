@@ -40,7 +40,22 @@ describe('Blog app', function() {
       cy.contains('login').click()
       cy.contains('wrong credentials')
         .should('have.css', 'color', 'rgb(255, 0, 0)')
+    })
+  })
 
+  describe.only('When logged in', function() {
+    beforeEach(function() {
+      cy.login({ username: 'pasagedev', password:'pasa1234' })
+    })
+
+    it('A blog can be created', function() {
+      cy.contains('create new blog').click()
+      cy.get('[name="title"]').type('title of testing blog')
+      cy.get('[name="author"]').type('author of testing blog')
+      cy.get('[name="url"]').type('url of testing blog')
+
+      cy.get('form').contains('create').click()
+      cy.contains('title of testing blog author of testing blog')
     })
   })
 
