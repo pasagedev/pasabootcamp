@@ -60,16 +60,14 @@ describe('Blog app', function() {
 
     describe('and blogs exist', function() {
       beforeEach(function() {
-        cy.createBlog({ title:'first blog', author: 'Pablo', url: 'www.firstBlog.com' })
-        cy.createBlog({ title:'second blog', author: 'Pablo', url: 'www.secondBlog.com' })
-        cy.createBlog({ title:'third blog', author: 'Pablo', url: 'www.thirdBlog.com' })
+        cy.createBlog({ title:'first blog', author: 'Pablo', url: 'www.firstBlog.com', likes: 0 })
+        cy.createBlog({ title:'second blog', author: 'Pablo', url: 'www.secondBlog.com', likes: 2 })
+        cy.createBlog({ title:'third blog', author: 'Pablo', url: 'www.thirdBlog.com', likes: 4 })
       })
 
       it('like button works correctly', function() {
-        cy.contains('first blog')
-          .contains('show').click()
-        cy.contains('likes 0')
-          .contains('like').click()
+        cy.contains('first blog').contains('show').click()
+        cy.contains('likes 0').contains('like').click()
 
         cy.contains('likes 1')
       })
@@ -83,7 +81,7 @@ describe('Blog app', function() {
         cy.get('html').should('not.contain', 'second blog')
       })
 
-      it.only('blog can\'t be deleted by user diferent of creator', function() {
+      it('blog can\'t be deleted by user diferent of creator', function() {
         cy.logout()
         cy.request('POST', 'http://localhost:3003/api/users', {
           name: 'Fla', username: 'flamadev', password: 'flama1234'
@@ -94,6 +92,20 @@ describe('Blog app', function() {
 
         cy.contains('second blog')
           .should('not.contain', 'delete')
+      })
+
+      it.only('blogs are sorted by numbers of likes', function() {
+        cy.contains('show').click()
+        cy.contains('likes 4')
+        cy.contains('show').click()
+        cy.contains('likes 2')
+        cy.contains('show').click()
+        cy.contains('likes 0')
+
+        cy.get('div .hideContent').should('have.class', 'hideContent')
+          .then(all => {
+            console.log(all)
+          })
       })
     })
   })
