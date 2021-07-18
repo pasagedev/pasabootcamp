@@ -73,6 +73,28 @@ describe('Blog app', function() {
 
         cy.contains('likes 1')
       })
+
+      it('blog can be deleted by same user creator', function() {
+        cy.contains('second blog')
+          .contains('show').click()
+
+        cy.contains('second blog')
+          .contains('delete').click()
+        cy.get('html').should('not.contain', 'second blog')
+      })
+
+      it.only('blog can\'t be deleted by user diferent of creator', function() {
+        cy.logout()
+        cy.request('POST', 'http://localhost:3003/api/users', {
+          name: 'Fla', username: 'flamadev', password: 'flama1234'
+        })
+        cy.login({ username: 'flamadev', password: 'flama1234' })
+        cy.contains('second blog')
+          .contains('show').click()
+
+        cy.contains('second blog')
+          .should('not.contain', 'delete')
+      })
     })
   })
 

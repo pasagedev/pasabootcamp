@@ -8,6 +8,11 @@ Cypress.Commands.add('login', function({ username, password }) {
   cy.visit('http://localhost:3000')
 })
 
+Cypress.Commands.add('logout', function () {
+  localStorage.removeItem('loggedBlogAppUser')
+
+})
+
 Cypress.Commands.add('createBlog', function({ title, author, url }) {
   cy.request({
     url: 'http://localhost:3003/api/blogs',
