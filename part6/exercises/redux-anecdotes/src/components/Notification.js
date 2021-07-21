@@ -1,9 +1,7 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { removeNotification } from '../reducers/notificationReducer'
+import {  useSelector } from 'react-redux'
 
 const Notification = () => {
-  const dispatch = useDispatch()
   const notification = useSelector(state => state.notification)
 
   const style = {
@@ -11,10 +9,14 @@ const Notification = () => {
     padding: 10,
     borderWidth: 1
   }
+
   return (
-    <div style={style}>
-      {notification}
-    </div>
+    notification === null
+      ? null
+      :
+      <div style={style}>
+        {notification}
+      </div>
   )
 }
 
