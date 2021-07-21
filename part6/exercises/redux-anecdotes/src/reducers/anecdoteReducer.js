@@ -25,7 +25,7 @@ export const initializeAnecdotes = (anecdotes) => {
 export const createAnecdote = anecdote => {
   return {
     type: 'NEW_ANECDOTE',
-    data: asObject(anecdote)
+    data: anecdote
     }
   }
 
