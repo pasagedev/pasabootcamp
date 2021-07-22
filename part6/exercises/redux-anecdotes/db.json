@@ -37,7 +37,7 @@
     },
     {
       "content": "hola que tal",
-      "votes": 2,
+      "votes": 3,
       "id": "G2c1YH0"
     },
     {
@@ -59,6 +59,11 @@
       "content": "hola manola como te va",
       "votes": 0,
       "id": "7WNaiIe"
+    },
+    {
+      "content": "neuva con connect",
+      "votes": 9,
+      "id": "OTmRF12"
     }
   ]
 }
