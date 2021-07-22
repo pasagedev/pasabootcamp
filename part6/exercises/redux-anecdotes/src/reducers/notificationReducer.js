@@ -1,8 +1,17 @@
-export const setNotificationWith = message => {
-    return {
-        type:'SET_NOTIFICATION',
-        data: { message }
+export const setNotificationWith = (message, time) => {
+    const timeout = time * 1000
+    return async dispatch => {
+        dispatch({
+            type:'SET_NOTIFICATION',
+            data: { message }
+        })
+        
+        await setTimeout(() => {
+            dispatch(removeNotification())
+        }, timeout);
     }
+    
+    
 }
 
 export const removeNotification = () => {
