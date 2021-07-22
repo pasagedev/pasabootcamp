@@ -2,8 +2,8 @@
   "anecdotes": [
     {
       "content": "If it hurts, do it more often",
-      "id": "47145",
-      "votes": 0
+      "votes": 10,
+      "id": "47145"
     },
     {
       "content": "Adding manpower to a late software project makes it later!",
@@ -31,39 +31,9 @@
       "votes": 0
     },
     {
-      "content": "asdasada",
-      "votes": 0,
-      "id": "XH4pCLt"
-    },
-    {
-      "content": "hola que tal",
-      "votes": 3,
-      "id": "G2c1YH0"
-    },
-    {
-      "content": "otra con insomnia",
-      "votes": 9,
-      "id": "9-UqJcV"
-    },
-    {
-      "content": "sdsds",
-      "votes": 0,
-      "id": "Q3bY1S5"
-    },
-    {
-      "content": "hola",
-      "votes": 0,
-      "id": "8YxnK2K"
-    },
-    {
-      "content": "hola manola como te va",
-      "votes": 0,
-      "id": "7WNaiIe"
-    },
-    {
-      "content": "neuva con connect",
-      "votes": 9,
-      "id": "OTmRF12"
+      "content": "holiiissss",
+      "votes": 25,
+      "id": "iMnss8s"
     }
   ]
 }
