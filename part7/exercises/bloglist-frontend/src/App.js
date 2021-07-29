@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import { BlogForm } from './components/BlogForm'
-import { Notification } from './components/notification'
+import { Notification } from './components/Notification'
 import { LoginForm } from './components/LoginForm'
 import { Togglable } from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { useDispatch } from 'react-redux'
+import { clearNotification, setNotificationWith } from './reducers/notificationReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -16,6 +18,7 @@ const App = () => {
   const DEFAULT_MESSAGE = { content: null, type: null }
   const [message, setMessage] = useState(DEFAULT_MESSAGE)
 
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -45,24 +48,14 @@ const App = () => {
       setPassword('')
       setUser(user)
       blogService.setToken(user.token)
-      setMessage(
-        {
-          content: `${user.name} logged in successfully`,
-          type: 'success'
-        }
-      )
+      dispatch(setNotificationWith(`${user.name} logged in successfully`, false))
       setTimeout(() => {
-        setMessage(DEFAULT_MESSAGE)
+        dispatch(clearNotification())
       }, 3000)
     }catch (exception) {
-      setMessage(
-        {
-          content: 'wrong credentials',
-          type: 'error'
-        }
-      )
+      dispatch(setNotificationWith('wrong credentials', true))
       setTimeout(() => {
-        setMessage(DEFAULT_MESSAGE)
+        dispatch(clearNotification())
       }, 3000)
       console.log('wrong credentials')
     }
