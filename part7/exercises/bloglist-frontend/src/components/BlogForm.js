@@ -20,6 +20,7 @@ export const BlogForm = () => {
     setAuthor('')
     setUrl('')
   }
+
   return(
     <div>
       <h2>create new</h2>

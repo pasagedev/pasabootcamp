@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { BlogForm } from './components/BlogForm'
 import { Notification } from './components/Notification'
 import { LoginForm } from './components/LoginForm'
 import { Togglable } from './components/Togglable'
 import blogService from './services/blogs'
-import loginService from './services/login'
-import { useDispatch } from 'react-redux'
-import { clearNotification, setNotificationWith } from './reducers/notificationReducer'
+import { useDispatch, useSelector } from 'react-redux'
 import { BlogList } from './components/BlogList'
 import { initializeBlogList } from './reducers/blogReducer'
+import { removeUser, setUserWith } from './reducers/userReducer'
 
 const App = () => {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
 
+  const user = useSelector(state => state.user)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -23,42 +20,15 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(setUserWith(user))
       blogService.setToken(user.token)
     }
 
   }, [])
 
-  const handleLogin = async event => {
-    event.preventDefault()
-    try{
-      const user = await loginService.login({
-        username, password
-      })
-      window.localStorage.setItem(
-        'loggedBlogAppUser', JSON.stringify(user)
-      )
-      console.log(user)
-      setUsername('')
-      setPassword('')
-      setUser(user)
-      blogService.setToken(user.token)
-
-      dispatch(setNotificationWith(`${user.name} logged in successfully`, false))
-      setTimeout(() => {
-        dispatch(clearNotification())
-      }, 3000)
-    }catch (exception) {
-      dispatch(setNotificationWith('wrong credentials', true))
-      setTimeout(() => {
-        dispatch(clearNotification())
-      }, 3000)
-    }
-  }
-
   const handleLogout = () => {
     window.localStorage.clear('loggedBlogAppUser')
-    setUser(null)
+    dispatch(removeUser())
   }
 
   return (
@@ -66,13 +36,7 @@ const App = () => {
       <h2>blogs</h2>
       <Notification />
       {user === null
-        ? <LoginForm
-          handleSubmit={handleLogin}
-          username={username}
-          password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange= {({ target }) => setPassword(target.value)}
-        />
+        ? <LoginForm />
         : <div>
           <p>{user.name} logged in
             <button onClick = {handleLogout} >logout</button>

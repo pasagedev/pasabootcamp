@@ -13,7 +13,6 @@ export const initializeBlogList = () => {
 export const createNewBlog = (blog) => {
   return async (dispatch) => {
     const newBlogCreated = await blogService.create(blog)
-    console.log(newBlogCreated)
     dispatch({
       type: 'NEW_BLOG',
       data: newBlogCreated
@@ -26,7 +25,7 @@ export const updateBlog = ({ id, ...blog }) => {
     const blogUpdated = await blogService.update(id, blog)
     dispatch({
       type: 'UPDATE_BLOG',
-      data: blogUpdated
+      data: { ...blogUpdated, user: blog['user'] }
     })
   }
 }
