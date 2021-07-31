@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BlogList } from './components/BlogList'
 import { initializeBlogList } from './reducers/blogReducer'
 import { removeUser, setUserWith } from './reducers/userReducer'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { Users } from './components/Users'
 
 const App = () => {
 
@@ -32,23 +34,29 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Router>
       <h2>blogs</h2>
       <Notification />
       {user === null
         ? <LoginForm />
         : <div>
-          <p>{user.name} logged in
-            <button onClick = {handleLogout} >logout</button>
-          </p>
-          <Togglable showButtonLabel='create new blog' hideButtonLabel='cancel'>
-            <BlogForm />
-          </Togglable>
-          <BlogList
-            user={user}/>
+          <p>{user.name} logged in</p>
+          <button onClick = {handleLogout} >logout</button>
+          <Switch>
+            <Route path='/users'>
+              <h2>Users</h2>
+              <Users />
+            </Route>
+            <Route path='/'>
+              <Togglable showButtonLabel='create new blog' hideButtonLabel='cancel'>
+                <BlogForm />
+              </Togglable>
+              <BlogList user={user}/>
+            </Route>
+          </Switch>
         </div>
       }
-    </div>
+    </Router>
   )
 }
 

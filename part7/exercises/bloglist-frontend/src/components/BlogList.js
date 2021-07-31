@@ -5,7 +5,6 @@ import Blog from './Blog'
 export const BlogList = ({ user }) => {
   const blogs = useSelector(state => state.blogs)
   const sortedBlogs = blogs.sort((first, second) => second.likes - first.likes)
-  console.log(user, blogs)
 
   return(
     sortedBlogs.map(blog =>
