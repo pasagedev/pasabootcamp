@@ -1,11 +1,9 @@
 POST http://localhost:3003/api/blogs
-Content-type: application/json 
+Content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhc2FnZWRldiIsImlkIjoiNjEwMjc5NzEyNWRhNTgyZWVjOTVjNzIxIiwiaWF0IjoxNjI3NzU0ODUyfQ.-wrmw73JPgHzW3KIQTEheprjJh1BaCnv4Fk9eDYJ9kc
 
 {
-    "title": "Blog with token",
+    "title": "Un blog sin comentarios",
     "author": "Pablo",
-    "url": "pasage.dev",
-    "userId": "60e3416013f74d55a8ba3cda",
-    "likes": 3
-
+    "url": "pasage.dev"
 }

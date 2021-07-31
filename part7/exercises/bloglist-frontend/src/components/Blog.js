@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { deleteBlog, updateBlog } from '../reducers/blogReducer'
@@ -6,7 +6,6 @@ import { deleteBlog, updateBlog } from '../reducers/blogReducer'
 const Blog = ({ deleteButton }) => {
   const blogId = useParams().blogId
   const dispatch = useDispatch()
-  const [visible, setVisible] = useState(false)
 
   const blog = useSelector(store => store.blogs.find(
     blog => blog.id === blogId
@@ -27,10 +26,6 @@ const Blog = ({ deleteButton }) => {
     dispatch(deleteBlog(blog.id))
   }
 
-  const showWhenVisible = { display: visible ? '': 'none' }
-  const toggleVisivility = () => setVisible(!visible)
-  const buttonLabelVisibility = visible ? 'hide' : 'show'
-
   return(
     <div>
       <h2>{blog.title} {blog.author}</h2>
@@ -41,6 +36,12 @@ const Blog = ({ deleteButton }) => {
         ? <button onClick={handleDelete}>delete</button>
         : null
       }
+      <h3>Comments</h3>
+      <ul>
+        {blog.comments && blog.comments.map((comment, index) =>
+          <li key={index}>{comment}</li>
+        )}
+      </ul>
     </div>
   )
 }
