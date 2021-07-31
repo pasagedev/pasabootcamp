@@ -10,7 +10,7 @@ import Blog from './components/Blog'
 import { initializeBlogList } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import { removeUser, setUserWith } from './reducers/userReducer'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
 import { Users } from './components/Users'
 import { User } from './components/User'
 
@@ -38,15 +38,22 @@ const App = () => {
     dispatch(removeUser())
   }
 
+  const padding = {
+    padding: '5px'
+  }
+
   return (
     <Router>
-      <h2>blogs</h2>
-      <Notification />
       {user === null
         ? <LoginForm />
         : <div>
-          <p>{user.name} logged in</p>
-          <button onClick = {handleLogout} >logout</button>
+          <header style={{ background: 'lightgrey' }}>
+            <Link style={padding} to='/blogs'>blogs</Link>
+            <Link style={padding} to='/users'>users</Link>
+            {user.username} logged in <button onClick={handleLogout}>logout</button>
+          </header>
+          <Notification />
+          <h2>blogs app</h2>
           <Switch>
             <Route path='/users/:userId'>
               <User />
@@ -59,7 +66,6 @@ const App = () => {
               <Blog />
             </Route>
             <Route path='/'>
-              {console.log('path /')}
               <Togglable showButtonLabel='create new blog' hideButtonLabel='cancel'>
                 <BlogForm />
               </Togglable>
