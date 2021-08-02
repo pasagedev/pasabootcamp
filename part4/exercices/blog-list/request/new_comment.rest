@@ -1,0 +1,7 @@
+POST http://localhost:3003/api/blogs/6105996b5f9a942ca09723f8/comments
+Content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBhc2FnZWRldiIsImlkIjoiNjEwMjc5NzEyNWRhNTgyZWVjOTVjNzIxIiwiaWF0IjoxNjI3NzU0ODUyfQ.-wrmw73JPgHzW3KIQTEheprjJh1BaCnv4Fk9eDYJ9kc
+
+{
+    "comment": "nuevo comentario desde client rest"
+}

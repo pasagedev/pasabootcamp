@@ -40,6 +40,17 @@ export const deleteBlog = (id) => {
   }
 }
 
+export const commentBlog = (blog, comment) => {
+  return async (dispatch) => {
+    const commentedBlog = await blogService.comment(blog.id, comment)
+
+    dispatch({
+      type: 'UPDATE_BLOG',
+      data: { ...commentedBlog, user: blog['user']  }
+    })
+  }
+}
+
 export const blogReducer = (state=[], { type, data }) => {
   switch (type) {
   case 'INIT_BLOGS': {

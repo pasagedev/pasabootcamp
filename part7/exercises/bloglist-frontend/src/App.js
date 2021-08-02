@@ -31,7 +31,7 @@ const App = () => {
       blogService.setToken(user.token)
     }
 
-  }, [])
+  }, [dispatch])
 
   const handleLogout = () => {
     window.localStorage.clear('loggedBlogAppUser')
