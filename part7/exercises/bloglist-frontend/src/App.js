@@ -13,6 +13,7 @@ import { removeUser, setUserWith } from './reducers/userReducer'
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom'
 import { Users } from './components/Users'
 import { User } from './components/User'
+import { NavBar } from './components/NavBar'
 
 
 const App = () => {
@@ -33,48 +34,37 @@ const App = () => {
 
   }, [dispatch])
 
-  const handleLogout = () => {
-    window.localStorage.clear('loggedBlogAppUser')
-    dispatch(removeUser())
-  }
-
-  const padding = {
-    padding: '5px'
-  }
-
   return (
-    <Router>
-      {user === null
-        ? <LoginForm />
-        : <div>
-          <header style={{ background: 'lightgrey' }}>
-            <Link style={padding} to='/blogs'>blogs</Link>
-            <Link style={padding} to='/users'>users</Link>
-            {user.username} logged in <button onClick={handleLogout}>logout</button>
-          </header>
-          <Notification />
-          <h2>blogs app</h2>
-          <Switch>
-            <Route path='/users/:userId'>
-              <User />
-            </Route>
-            <Route path='/users'>
-              <h2>Users</h2>
-              <Users />
-            </Route>
-            <Route path='/blogs/:blogId'>
-              <Blog />
-            </Route>
-            <Route path='/'>
-              <Togglable showButtonLabel='create new blog' hideButtonLabel='cancel'>
-                <BlogForm />
-              </Togglable>
-              <BlogList user={user}/>
-            </Route>
-          </Switch>
-        </div>
-      }
-    </Router>
+    <div className='container'>
+      <Notification />
+      <Router>
+        {user === null
+          ? <LoginForm />
+          : <div>
+            <NavBar />
+            <h2>blogs app</h2>
+            <Switch>
+              <Route path='/users/:userId'>
+                <User />
+              </Route>
+              <Route path='/users'>
+                <h2>Users</h2>
+                <Users />
+              </Route>
+              <Route path='/blogs/:blogId'>
+                <Blog />
+              </Route>
+              <Route path='/'>
+                <Togglable showButtonLabel='create new blog' hideButtonLabel='cancel'>
+                  <BlogForm />
+                </Togglable>
+                <BlogList user={user}/>
+              </Route>
+            </Switch>
+          </div>
+        }
+      </Router>
+    </div>
   )
 }
 

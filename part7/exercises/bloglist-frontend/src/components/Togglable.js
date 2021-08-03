@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Button } from 'react-bootstrap'
 
 export const Togglable = ({ children, showButtonLabel, hideButtonLabel }) => {
   const [visible, setVisible] = useState(false)
@@ -8,14 +9,20 @@ export const Togglable = ({ children, showButtonLabel, hideButtonLabel }) => {
 
   const toggleVisivility = () => setVisible(!visible)
 
+  const showHideButton = () => {
+    return hideButtonLabel === 'cancel'
+      ? <Button variant='secondary' onClick={toggleVisivility}>{hideButtonLabel}</Button>
+      : <button onClick={toggleVisivility}>{hideButtonLabel}</button>
+  }
+
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisivility}>{showButtonLabel}</button>
+        <Button onClick={toggleVisivility}>{showButtonLabel}</Button>
       </div>
       <div style={showWhenVisible}>
         {children}
-        <button onClick={toggleVisivility}>{hideButtonLabel}</button>
+        {showHideButton()}
       </div>
     </div>
   )

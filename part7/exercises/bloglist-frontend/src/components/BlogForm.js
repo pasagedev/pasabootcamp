@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Form, Button } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { createNewBlog } from '../reducers/blogReducer'
 
@@ -25,31 +26,30 @@ export const BlogForm = () => {
     <div>
       <h2>create new</h2>
       <form onSubmit={handleSubmit}>
-        <div> title:
-          <input
+        <Form.Group>
+          <Form.Label>title</Form.Label>
+          <Form.Control
             type='text'
             value={title}
             name='title'
             onChange={({ target }) => setTitle(target.value)}
           />
-        </div>
-        <div> author:
-          <input
+          <Form.Label>author</Form.Label>
+          <Form.Control
             type='text'
             value={author}
             name='author'
             onChange={({ target }) => setAuthor(target.value)}
           />
-        </div>
-        <div> url:
-          <input
+          <Form.Label>url</Form.Label>
+          <Form.Control
             type='text'
             value={url}
             name='url'
             onChange={({ target }) => setUrl(target.value)}
           />
-        </div>
-        <button type="submit">create</button>
+          <Button variant="primary" type="submit">create</Button>
+        </Form.Group>
       </form>
     </div>
   )}
