@@ -54,11 +54,14 @@ const typeDefs = gql`
 
 const resolvers = {
   Author: {
-    bookCount: (root) => books.filter(book => root.name === book.author).length
+    bookCount: async (root) => {
+      const books = await Book.find({ author: root._id })
+      return books.length
+    }
   },
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
+    bookCount: () => Book.collection.countDocuments(),
+    authorCount: () => Author.collection.countDocuments(),
     allAuthors: () => {
       return Author.find({})
     },
@@ -85,13 +88,14 @@ const resolvers = {
       const book = new Book({ ...args, author: author._id })
       return (book.save())
     },
-    editAuthor: (root, args) => {
+    editAuthor: async (root, args) => {
       const { name, setBornTo } = args
-      const index = authors.findIndex(author => author.name === name)
-      if (index === -1) return null
+      const author = await Author.findOne({ name })
 
-      authors[index].born = setBornTo
-      return authors[index]
+      if (author === null) { return null }
+
+      author.born = setBornTo
+      return author.save()
     }
   }
 }
