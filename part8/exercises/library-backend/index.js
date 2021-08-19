@@ -85,15 +85,15 @@ const resolvers = {
       return Author.find({})
     },
     allBooks: async (root, args) => {
-      const params = Object.keys(args)
-
-      const reducer = (filteredBooks, param) => {
-        return param === 'genre'
-          ? filteredBooks.filter(book => book.genres.includes(args[param]))
-          : filteredBooks.filter(book => book[param] === args[param])
+      const filter = {}
+      if (args.genre) {
+        filter.genres = args.genre
       }
-
-      return params.reduce(reducer, Book.find({}).populate('author'))
+      if (args.author) {
+        const author = await Author.findOne({ name: args.author })
+        filter.author = author._id
+      }
+      return Book.find(filter).populate('author')
     },
     me: (root, args, context) => {
       return context.currentUser
