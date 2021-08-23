@@ -1,12 +1,20 @@
-const { ApolloServer, gql, UserInputError, AuthenticationError } = require('apollo-server')
+const { execute, subscribe } = require('graphql')
+const { SubscriptionServer } = require('subscriptions-transport-ws')
+const { makeExecutableSchema } = require('@graphql-tools/schema')
+const express = require('express')
+const { createServer } = require('http')
+const { ApolloServer, gql, UserInputError, AuthenticationError } = require('apollo-server-express')
+const { PubSub } = require('graphql-subscriptions')
+
 const mongoose = require('mongoose')
 const Author = require('./models/author')
 const Book = require('./models/book')
 const User = require('./models/user')
 const jwt = require('jsonwebtoken')
-
 const JWT_SECRET = 'SECRET_WORD_FOR_TOKEN'
 const MONGODB_URI = 'mongodb+srv://bootcamp:34456631@cluster0.lz7do.mongodb.net/graphql-library?retryWrites=true&w=majority'
+
+const pubsub = new PubSub()
 
 console.log('connecting to', MONGODB_URI)
 
@@ -68,6 +76,9 @@ const typeDefs = gql`
       username: String!
       password: String!
     ): Token
+  },
+  type Subscription {
+    bookAdded: Book!
   }
 `
 
@@ -116,6 +127,9 @@ const resolvers = {
       const book = new Book({ ...args, author: author._id })
       try {
         const savedBook = await book.save()
+
+        pubsub.publish('BOOK_ADDED', { bookAdded: savedBook })
+
         return (savedBook.populate('author').execPopulate())
       } catch (error) {
         throw new UserInputError(error.message, { invalidArgs: args })
@@ -159,12 +173,20 @@ const resolvers = {
       }
       return ({ value: jwt.sign(userForToken, JWT_SECRET) })
     }
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+    }
   }
 }
 
+const app = express()
+const httpServer = createServer(app)
+const schema = makeExecutableSchema({ typeDefs, resolvers })
+
 const server = new ApolloServer({
-  typeDefs,
-  resolvers,
+  schema,
   context: async ({ req }) => {
     const auth = req ? req.headers.authorization : null
     if (auth && auth.toLocaleLowerCase().startsWith('bearer ')) {
@@ -175,6 +197,31 @@ const server = new ApolloServer({
   }
 })
 
-server.listen().then(({ url }) => {
-  console.log(`Server ready at ${url}`)
-})
+server.start()
+  .then(() => {
+    server.applyMiddleware({
+      app,
+      path: '/'
+    })
+  })
+  .then(() => {
+    const subscriptionServer = SubscriptionServer.create({
+      schema,
+      execute,
+      subscribe
+    }, {
+      server: httpServer,
+      path: server.graphqlPath
+    })
+
+    const PORT = 4000
+    httpServer.listen(PORT, () =>
+      console.log(`Server is now running on http://localhost:${PORT}/graphql`)
+    )
+    return subscriptionServer
+  })
+
+// server.listen().then(({ url, subscriptionUrl }) => {
+//   console.log(`Server ready at ${url}`)
+//   console.log(`Subscription ready at ${subscriptionUrl}`)
+// })
