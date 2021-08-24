@@ -128,7 +128,9 @@ const resolvers = {
       try {
         const savedBook = await book.save()
 
-        pubsub.publish('BOOK_ADDED', { bookAdded: savedBook })
+        pubsub.publish('BOOK_ADDED', {
+          bookAdded: savedBook.populate('author').execPopulate()
+        })
 
         return (savedBook.populate('author').execPopulate())
       } catch (error) {
@@ -211,17 +213,14 @@ server.start()
       subscribe
     }, {
       server: httpServer,
-      path: server.graphqlPath
+      path: `${server.graphqlPath}graphql`
     })
 
     const PORT = 4000
-    httpServer.listen(PORT, () =>
-      console.log(`Server is now running on http://localhost:${PORT}/graphql`)
-    )
-    return subscriptionServer
-  })
 
-// server.listen().then(({ url, subscriptionUrl }) => {
-//   console.log(`Server ready at ${url}`)
-//   console.log(`Subscription ready at ${subscriptionUrl}`)
-// })
+    httpServer.listen(PORT, () => {
+      console.log(`🚀 Query endpoint ready at http://localhost:${PORT}${server.graphqlPath}`)
+      console.log(`🚀 Subscription endpoint ready at ws://localhost:${PORT}${server.graphqlPath}graphql`)
+      return subscriptionServer
+    })
+  })
