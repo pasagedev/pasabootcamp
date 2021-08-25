@@ -84,10 +84,7 @@ const typeDefs = gql`
 
 const resolvers = {
   Author: {
-    bookCount: async (root) => {
-      const books = await Book.find({ author: root._id })
-      return books.length
-    }
+    bookCount: (root) => root.books.length
   },
   Query: {
     bookCount: () => Book.collection.countDocuments(),
@@ -119,7 +116,7 @@ const resolvers = {
       if (!author) {
         author = new Author({ name: args.author })
         try {
-          await author.save()
+          author = await author.save()
         } catch (error) {
           throw new UserInputError(error.message, { invalidArgs: args })
         }
@@ -127,6 +124,8 @@ const resolvers = {
       const book = new Book({ ...args, author: author._id })
       try {
         const savedBook = await book.save()
+        author.books = author.books.concat(savedBook._id)
+        await author.save()
 
         pubsub.publish('BOOK_ADDED', {
           bookAdded: savedBook.populate('author').execPopulate()
