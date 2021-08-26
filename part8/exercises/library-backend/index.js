@@ -12,8 +12,9 @@ const Book = require('./models/book')
 const User = require('./models/user')
 const jwt = require('jsonwebtoken')
 const JWT_SECRET = 'SECRET_WORD_FOR_TOKEN'
-const MONGODB_URI = 'mongodb+srv://bootcamp:34456631@cluster0.lz7do.mongodb.net/graphql-library?retryWrites=true&w=majority'
 
+require('dotenv').config()
+const MONGODB_URI = process.env.MONGODB_URI
 const pubsub = new PubSub()
 
 console.log('connecting to', MONGODB_URI)
