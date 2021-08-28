@@ -1,3 +1,26 @@
+interface calcExcValues {
+    exercisesHours: Array<number>;
+    target: number;
+}
+
+const parseArguments = (args: Array<String>):calcExcValues => {
+    if (args.length < 4) throw new Error('Not enough arguments');
+
+    try {
+        const argsNumbers = args
+            .filter((v, index) => index > 1)
+            .map(arg => Number(arg))
+        if (argsNumbers.some(arg => isNaN(arg))) throw new Error("Provided values were not numbers");
+        return {
+            exercisesHours: argsNumbers.splice(1),
+            target: argsNumbers[0]
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 interface Result { 
     periodLength: number,
     trainingDays: number,
@@ -43,5 +66,9 @@ const calculateExercises = (exercisesHours: Array<number>, target: number): Resu
         average
     }
 }
-
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2))
+try {
+    const {exercisesHours, target} = parseArguments(process.argv);
+    console.log(calculateExercises(exercisesHours, target));
+} catch (error) {
+    console.log('Something was wrong: ', error.message)
+}
