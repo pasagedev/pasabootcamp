@@ -3,7 +3,7 @@ interface bmiValues {
     weight: number;
 }
 
-const parseArguments = (args: Array<String>):bmiValues => {
+export const parseArguments = (args: Array<String>):bmiValues => {
     if (args.length < 4) throw new Error('Not enough arguments');
     if (args.length > 4) throw new Error('Too many arguments');
 
@@ -22,7 +22,7 @@ const parseArguments = (args: Array<String>):bmiValues => {
     }
 }
 
-const calculateBmi = (height:number, weight:number): string => {
+export const calculateBmi = (height:number, weight:number): string => {
     const bmi = (weight / (height)**2);
     switch(true) {
         case bmi < 18.5 : {
@@ -49,5 +49,3 @@ try {
 } catch (error) {
     console.log('Something was wrong: ', error.message)
 }
-
-export {};
