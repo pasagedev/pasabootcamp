@@ -8,7 +8,7 @@ const parseArguments = (args: Array<String>):calcExcValues => {
 
     try {
         const argsNumbers = args
-            .filter((v, index) => index > 1)
+            .filter((_v, index) => index > 1)
             .map(arg => Number(arg))
         if (argsNumbers.some(arg => isNaN(arg))) throw new Error("Provided values were not numbers");
         return {

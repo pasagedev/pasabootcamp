@@ -28,14 +28,17 @@ const calculateBmi = (height:number, weight:number): string => {
         case bmi < 18.5 : {
             return "Underweight";
         }
-        case 18.5 < bmi && bmi< 24.9 : {
+        case 18.5 <= bmi && bmi< 24.9 : {
             return "Normal (healthy weight)";
         }
-        case bmi > 24.9 && bmi < 29.9 : {
+        case bmi >= 24.9 && bmi < 29.9 : {
             return "Overweight";
         }
-        case bmi > 29.9 : {
+        case bmi >= 29.9 : {
             return "Obese";
+        }
+        default: {
+            throw new Error("Some value it's not correct ")
         }
     }
 }
