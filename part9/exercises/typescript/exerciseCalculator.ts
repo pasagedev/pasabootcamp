@@ -3,22 +3,18 @@ interface calcExcValues {
     target: number;
 }
 
-const parseArguments = (args: Array<String>):calcExcValues => {
+const parseArguments = (args: Array<string>):calcExcValues => {
     if (args.length < 4) throw new Error('Not enough arguments');
 
-    try {
         const argsNumbers = args
             .filter((_v, index) => index > 1)
-            .map(arg => Number(arg))
+            .map(arg => Number(arg));
         if (argsNumbers.some(arg => isNaN(arg))) throw new Error("Provided values were not numbers");
         return {
             exercisesHours: argsNumbers.splice(1),
             target: argsNumbers[0]
-        }
-    } catch (error) {
-        throw error;
-    }
-}
+        };
+};
 
 
 interface Result { 
@@ -34,9 +30,9 @@ const calculateExercises = (exercisesHours: Array<number>, target: number): Resu
     const periodLength = exercisesHours.length;
     const trainingDays = exercisesHours.filter(hoursDay => hoursDay > 0).length;
     const totalExercisesHours = exercisesHours.reduce((total, hoursDay)=> {
-        return total + hoursDay
-    }, 0)
-    const average = totalExercisesHours / periodLength
+        return total + hoursDay;
+    }, 0);
+    const average = totalExercisesHours / periodLength;
     let rating = 1, ratingDescription;
     switch (true) {
         case (average >= target): {
@@ -64,11 +60,12 @@ const calculateExercises = (exercisesHours: Array<number>, target: number): Resu
         ratingDescription,
         target,
         average
-    }
-}
+    };
+};
 try {
     const {exercisesHours, target} = parseArguments(process.argv);
     console.log(calculateExercises(exercisesHours, target));
-} catch (error) {
-    console.log('Something was wrong: ', error.message)
+} catch (error:unknown) {
+    const err = error as Error;
+    console.log('Something was wrong: ', err.message);
 }

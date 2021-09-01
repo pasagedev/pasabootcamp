@@ -3,24 +3,20 @@ interface bmiValues {
     weight: number;
 }
 
-export const parseArguments = (args: Array<String>):bmiValues => {
+export const parseArguments = (args: Array<string>):bmiValues => {
     if (args.length < 4) throw new Error('Not enough arguments');
     if (args.length > 4) throw new Error('Too many arguments');
 
-    try {
         const height = Number(args[2]);
         const weight = Number(args[3]);
         
-        if (isNaN(height) || isNaN(weight)) throw new Error("Provided values were not numbers")
+        if (isNaN(height) || isNaN(weight)) throw new Error("Provided values were not numbers");
 
         return {
             height: height < 10 ? height : height/100,
             weight
-        }
-    } catch (error) {
-        throw error;
-    }
-}
+        };
+};
 
 export const calculateBmi = (height:number, weight:number): string => {
     const bmi = (weight / (height)**2);
@@ -38,14 +34,15 @@ export const calculateBmi = (height:number, weight:number): string => {
             return "Obese";
         }
         default: {
-            throw new Error("Some value it's not correct ")
+            throw new Error("Some value it's not correct ");
         }
     }
-}
+};
 
 try {
-    const {height, weight} = parseArguments(process.argv)
+    const {height, weight} = parseArguments(process.argv);
     console.log(calculateBmi(height, weight));
-} catch (error) {
-    console.log('Something was wrong: ', error.message)
+} catch (error:unknown) {
+    const err = error as Error;
+    console.log('Something was wrong: ', err.message);
 }
