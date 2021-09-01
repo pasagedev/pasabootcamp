@@ -1,4 +1,4 @@
-{
+module.exports= {
     "extends": [
       "eslint:recommended",
       "plugin:@typescript-eslint/recommended",
@@ -7,7 +7,8 @@
     "plugins": ["@typescript-eslint"],
     "env": {
       "node": true,
-      "es6": true
+      "es6": true,
+      "commonjs":true
     },
     "rules": {
       "@typescript-eslint/semi": ["error"],
@@ -20,4 +21,4 @@
     "parserOptions": {
       "project": "./tsconfig.json"
     }
-  }
+} 

@@ -26,7 +26,7 @@ interface Result {
     target: number,
     average: number }
 
-const calculateExercises = (exercisesHours: Array<number>, target: number): Result => {
+export const calculateExercises = (exercisesHours: Array<number>, target: number): Result => {
     const periodLength = exercisesHours.length;
     const trainingDays = exercisesHours.filter(hoursDay => hoursDay > 0).length;
     const totalExercisesHours = exercisesHours.reduce((total, hoursDay)=> {
@@ -69,3 +69,5 @@ try {
     const err = error as Error;
     console.log('Something was wrong: ', err.message);
 }
+
+export {parseArguments as checkArguments};

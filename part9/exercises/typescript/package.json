@@ -8,7 +8,8 @@
     "dev": "ts-node-dev index.ts",
     "ts-node": "ts-node",
     "bmiCalculator": "ts-node bmiCalculator.ts",
-    "exerciseCalculator": "ts-node exerciseCalculator.ts"
+    "exerciseCalculator": "ts-node exerciseCalculator.ts",
+    "lint": "eslint --ext .ts ."
   },
   "keywords": [],
   "author": "",
