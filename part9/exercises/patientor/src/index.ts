@@ -5,6 +5,7 @@ import patientsRouter from './routes/patients';
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
 app.get('/api/ping', (_req, res) => {
     console.log('new request on this endpoint');
