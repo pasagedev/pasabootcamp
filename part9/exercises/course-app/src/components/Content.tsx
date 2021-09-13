@@ -1,17 +1,14 @@
-import {CourseParts} from '../types'
+import type {CoursePart} from '../App'
+import Part from './Part'
 
 interface ContentProps {
-    parts: CourseParts[]
+    parts: CoursePart[]
 }
 
 const Content: React.FC<ContentProps> = ({parts}) => {
     return (
         <div>
-            {parts.map(p => 
-            <p id={p.name}>
-                {p.name} {p.exerciseCount}
-            </p>
-            )}
+            {parts.map(p => <Part part={p}/> )}
         </div>
     )
 }
