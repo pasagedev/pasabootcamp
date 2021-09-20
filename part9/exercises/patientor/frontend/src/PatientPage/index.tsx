@@ -5,6 +5,7 @@ import { Patient } from '../types';
 import {apiBaseUrl} from '../constants';
 import {useStateValue} from '../state/state';
 import { IconGender } from './IconGender';
+import { updatePatient } from '../state';
 
 export const PatientDetails: React.FC = () => {
     const params = useParams<{id: string}>();
@@ -23,9 +24,7 @@ export const PatientDetails: React.FC = () => {
                 .then(patient => {
                     setPatientDetail(patient);
                     return patient;})
-                .then(patient => dispatch({
-                    type: 'UPDATE_PATIENT', payload: patient
-                }));
+                .then(patient => dispatch(updatePatient(patient)));
         }
     },[]);
 
