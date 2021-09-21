@@ -37,7 +37,9 @@ export const PatientDetails: React.FC = () => {
                 <div>ssn: {patientDetail.ssn}</div>
                 <div>occupation: {patientDetail.occupation}</div>
             <h3>entries</h3>
-            {patientDetail.entries.map(e => <PatientEntry key={e.id} entry={e}/>)}
+            {!patientDetail.entries
+                ? null
+                :patientDetail.entries.map(e => <PatientEntry key={e.id} entry={e}/>)}
             </div>
         </div>
     );};
