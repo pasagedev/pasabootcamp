@@ -6,6 +6,7 @@ import {apiBaseUrl} from '../constants';
 import {useStateValue} from '../state/state';
 import { IconGender } from './IconGender';
 import { updatePatient } from '../state';
+import { PatientEntry } from './Entry';
 
 export const PatientDetails: React.FC = () => {
     const params = useParams<{id: string}>();
@@ -35,7 +36,8 @@ export const PatientDetails: React.FC = () => {
             <div>
                 <div>ssn: {patientDetail.ssn}</div>
                 <div>occupation: {patientDetail.occupation}</div>
-                <div>date: {patientDetail.dateOfBirth}</div>
+            <h3>entries</h3>
+            {patientDetail.entries.map(e => <PatientEntry key={e.id} entry={e}/>)}
             </div>
         </div>
     );};
