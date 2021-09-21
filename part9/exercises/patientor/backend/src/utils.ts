@@ -15,6 +15,7 @@ const isDate = (date: string): boolean => {
 const isGender = (gender: any): gender is Gender  => {
     return Object.values(Gender).includes(gender);
 };
+
 const parseName = (name:any):string => {
     if(!name || !isString(name)) {
         throw new Error('Icorrect or missing name: ' + name);
@@ -49,6 +50,7 @@ const parseOccupation = (occupation: any): string => {
     }
     return occupation;
 };
+
 
 const toNewPatientEntry = (object: any): NewPatientEntry => {
     return {
