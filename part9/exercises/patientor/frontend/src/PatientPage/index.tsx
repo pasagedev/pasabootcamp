@@ -6,7 +6,7 @@ import {apiBaseUrl} from '../constants';
 import {useStateValue} from '../state/state';
 import { IconGender } from './IconGender';
 import { updatePatient } from '../state';
-import { PatientEntry } from './Entry';
+import { PatientEntry } from './EntryPatient';
 
 export const PatientDetails: React.FC = () => {
     const params = useParams<{id: string}>();

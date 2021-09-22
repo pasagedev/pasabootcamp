@@ -25,14 +25,14 @@ export interface Diagnose {
   name: string
   latin?: string
 }
-export enum healthCheckRating {
+export enum HealthCheckRating {
   "Healthy" = 0,
   "LowRisk" = 1,
   "HighRisk" = 2,
   "CriticalRisk" = 3
 }
 
-interface BaseEntry {
+export interface BaseEntry {
   id: string;
   description: string;
   date: string;
@@ -40,18 +40,18 @@ interface BaseEntry {
   diagnosisCodes?: Array<Diagnose['code']>
 }
 
-interface HealthCheckEntry extends BaseEntry {
+export interface HealthCheckEntry extends BaseEntry {
   type: "HealthCheck";
-  healthCheckRating: healthCheckRating
+  healthCheckRating: HealthCheckRating
 }
 
-interface OccupationalHealthcareEntry extends BaseEntry{
+export interface OccupationalHealthcareEntry extends BaseEntry{
   type: "OccupationalHealthcare";
   employerName: string;
   sickLeave?: {startDate: string, endDate: string}
 }
 
-interface HospitalEntry extends BaseEntry{
+export interface HospitalEntry extends BaseEntry{
   type: "Hospital";
   discharge: {date: string, criteria: string}
 }
