@@ -38,25 +38,34 @@ export const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Form.Group>
-        <Form.Label>username</Form.Label>
-        <Form.Control
-          type='text'
-          value={username}
-          name='Username'
-          onChange={event => setUsername(event.target.value)}
-        />
+    <>
+      <h2>blogs app</h2>
+      <p><i>You can use &quot;example&quot; as username and password to try</i></p>
+      <Form onSubmit={handleSubmit}>
+        <Form.Group  >
+          <Form.Label>username</Form.Label>
+          <Form.Control
+            style= {{ width: '250px' }}
+            type='text'
+            placeholder='username'
+            value={username}
+            name='Username'
+            onChange={event => setUsername(event.target.value)}
+          />
 
-        <Form.Label>password</Form.Label>
-        <Form.Control
-          type='password'
-          value={password}
-          name='Password'
-          onChange={event => setPassword(event.target.value)}
-        />
-        <Button variant='primary' type="submit">login</Button>
-      </Form.Group>
-    </form>
+          <Form.Label>password</Form.Label>
+          <Form.Control
+            style= {{ width: '250px' }}
+            type='password'
+            placeholder='password'
+            value={password}
+            name='Password'
+            onChange={event => setPassword(event.target.value)}
+          />
+          <Button variant='primary' type="submit">login</Button>
+        </Form.Group>
+      </Form>
+
+    </>
   )
 }
